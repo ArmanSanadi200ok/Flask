@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Signup</title>
+  <style>
+    body {
+      font-family: Poppins, sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #232526, #414345);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(12px);
+      padding: 35px;
+      border-radius: 18px;
+      width: 350px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #f1c40f;
+      text-shadow: 0 0 8px rgba(241,196,15,0.5);
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      box-shadow: 0 0 8px #00aaff, inset 0 0 5px #00aaff;
+      border: 1px solid #00aaff;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    /* 🔥 STYLISH EYE ICON */
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      transition: 0.3s ease-in-out;
+      opacity: 0.8;
+    }
+
+    .toggle-password:hover {
+      transform: translateY(-50%) scale(1.2);
+      opacity: 1;
+      filter: drop-shadow(0 0 8px #00aaff);
+    }
+
+    .eye-icon {
+      fill: #00aaff;
+      transition: 0.3s ease;
+    }
+
+    .toggle-password:hover .eye-icon {
+      fill: #f1c40f;
+      filter: drop-shadow(0 0 10px #f1c40f);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #f1c40f, #ffdd2d);
+      color: black;
+      border: none;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 12px;
+      font-size: 16px;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(241,196,15,0.4);
+    }
+
+    button:hover {
+      background: royalblue;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(65,105,225,0.5);
+      transform: translateY(-2px);
+    }
+
+    .toggle-link {
+      margin-top: 14px;
+      display: block;
+      cursor: pointer;
+      color: #f1c40f;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .toggle-link:hover {
+      color: royalblue;
+      text-shadow: 0 0 6px rgba(65,105,225,0.5);
+    }
+
+    .error {
+      color: #ff4d4d;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- LOGIN FORM -->
+    <div id="login-form">
+      <h2>Sign In</h2>
+      <form method="POST" action="/">
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <input type="text" name="username" placeholder="Username" required>
+
+        <div class="password-wrapper">
+          <input type="password" id="login-pass" name="password" placeholder="Password" required>
+
+          <!-- 🔥 Stylish Eye Icon -->
+          <svg class="toggle-password" onclick="togglePassword('login-pass')" viewBox="0 0 24 24">
+            <path class="eye-icon"
+              d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 
+              11a4 4 0 110-8 4 4 0 010 8z"/>
+          </svg>
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <span class="toggle-link" onclick="toggleForm()">Don't have an account? Sign Up</span>
+    </div>
+
+
+
+    <!-- SIGNUP FORM -->
+    <div id="signup-form" class="hidden">
+      <h2>Sign Up</h2>
+      <form method="POST" action="/signup">
+
+        <input type="text" name="new_username" placeholder="Choose Username" required>
+
+        <div class="password-wrapper">
+          <input type="password" id="signup-pass" name="new_password" placeholder="Choose Password" required>
+
+          <!-- 🔥 Stylish Eye Icon -->
+          <svg class="toggle-password" onclick="togglePassword('signup-pass')" viewBox="0 0 24 24">
+            <path class="eye-icon"
+              d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 
+              11a4 4 0 110-8 4 4 0 010 8z"/>
+          </svg>
+        </div>
+
+        <button type="submit">Register</button>
+      </form>
+
+      <span class="toggle-link" onclick="toggleForm()">Already have an account? Sign In</span>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleForm() {
+      document.getElementById("login-form").classList.toggle("hidden");
+      document.getElementById("signup-form").classList.toggle("hidden");
+    }
+
+    function togglePassword(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>

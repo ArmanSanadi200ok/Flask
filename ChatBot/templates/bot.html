@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chatbot</title>
+
+<style>
+  body {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  /* Main full-screen container */
+  .chat-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Chat Header */
+  .chat-header {
+      padding: 18px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Header buttons container */
+  .header-buttons {
+      display: flex;
+      gap: 10px;
+  }
+
+  /* Common button style */
+  .btn {
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: 0.3s ease;
+  }
+
+  /* SUCCESS BUTTON (Clear) */
+  .btn-success {
+      background: #28a745;
+      color: white;
+      box-shadow: 0 4px 10px rgba(40,167,69,0.4);
+  }
+  .btn-success:hover {
+      background: #218838;
+      transform: translateY(-2px);
+  }
+
+  /* DANGER BUTTON (Logout) */
+  .btn-danger {
+      background: #dc3545;
+      color: white;
+      box-shadow: 0 4px 10px rgba(220,53,69,0.4);
+  }
+  .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+  }
+
+  /* Message box */
+  .chat-box {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scrollbar-width: none;
+  }
+
+  .chat-box::-webkit-scrollbar {
+    display: none;
+  }
+
+  .message {
+    max-width: 65%;
+    padding: 15px 20px;
+    border-radius: 25px;
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+
+  /* PRIMARY USER MESSAGE */
+  .user {
+    align-self: flex-end;
+    background: #007bff;
+    color: white;
+    box-shadow: 0 3px 10px rgba(0,123,255,0.4);
+    border-bottom-right-radius: 5px;
+  }
+
+  .assistant {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.9);
+    color: #222;
+    border-bottom-left-radius: 5px;
+  }
+
+  /* Input area */
+  .chat-input {
+    display: flex;
+    background: rgba(255,255,255,0.12);
+    padding: 15px 20px;
+    gap: 10px;
+  }
+
+  .chat-input input {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    background: rgba(255,255,255,0.9);
+  }
+
+  /* OUTLINE SEND BUTTON */
+  .send-btn {
+      border: 2px solid #00c6ff;
+      background: transparent;
+      color: #00c6ff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s ease;
+  }
+
+  .send-btn:hover {
+      background: #00c6ff;
+      color: white;
+      transform: translateY(-2px);
+  }
+</style>
+
+</head>
+<body>
+
+<div class="chat-container">
+
+  <div class="chat-header">
+    <span>Arman's AI – <b>Study Buddy</b></span>
+
+    <div class="header-buttons">
+        <form action="/clear" method="POST">
+            <button class="btn btn-success" type="submit">Clear</button>
+        </form>
+
+        <a href="/logout">
+            <button class="btn btn-danger" type="button">Logout</button>
+        </a>
+    </div>
+  </div>
+
+  <div class="chat-box">
+    {% for msg in messages %}
+      {% if msg.role == "user" %}
+        <div class="message user">{{ msg.content }}</div>
+      {% elif msg.role == "assistant" %}
+        <div class="message assistant">{{ msg.content | safe }}</div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <form class="chat-input" action="/send" method="POST">
+    <input type="text" name="message" placeholder="Type your message..." required>
+    <button class="send-btn" type="submit">Send</button>
+  </form>
+
+</div>
+
+<script>
+  var chatBox = document.querySelector('.chat-box');
+  chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+
+</body>
+</html>
