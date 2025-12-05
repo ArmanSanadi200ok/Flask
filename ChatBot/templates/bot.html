@@ -2,165 +2,173 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Chatbot</title>
-
+<title>Arman's AI Chatbot</title>
 <style>
-  body {
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-  }
-
-  body {
+/* Reset & base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100vh;
-    width: 100vw;
-    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
-  }
+    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+}
 
-  /* Main full-screen container */
-  .chat-container {
-    width: 100%;
-    height: 100%;
+/* Chat container - glassmorphism */
+.chat-container {
+    width: 700px;
+    max-width: 95%;
+    height: 80vh;
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(10px);
-  }
+    border-radius: 25px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
 
-  /* Chat Header */
-  .chat-header {
-      padding: 18px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 20px;
-      font-weight: 600;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(6px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  }
+/* Header */
+.chat-header {
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    color: white;
+}
 
-  /* Header buttons container */
-  .header-buttons {
-      display: flex;
-      gap: 10px;
-  }
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
 
-  /* Common button style */
-  .btn {
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: 0.3s ease;
-  }
+.btn {
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s ease;
+}
 
-  /* SUCCESS BUTTON (Clear) */
-  .btn-success {
-      background: #28a745;
-      color: white;
-      box-shadow: 0 4px 10px rgba(40,167,69,0.4);
-  }
-  .btn-success:hover {
-      background: #218838;
-      transform: translateY(-2px);
-  }
+/* Clear button */
+.btn-success {
+    background: #28a745;
+    color: white;
+    box-shadow: 0 4px 10px rgba(40,167,69,0.4);
+}
+.btn-success:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
 
-  /* DANGER BUTTON (Logout) */
-  .btn-danger {
-      background: #dc3545;
-      color: white;
-      box-shadow: 0 4px 10px rgba(220,53,69,0.4);
-  }
-  .btn-danger:hover {
-      background: #c82333;
-      transform: translateY(-2px);
-  }
+/* Logout button */
+.btn-danger {
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 4px 10px rgba(220,53,69,0.4);
+}
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
 
-  /* Message box */
-  .chat-box {
+/* Chat messages */
+.chat-box {
     flex: 1;
     padding: 25px;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    overflow-y: auto;
     scrollbar-width: none;
-  }
+}
+.chat-box::-webkit-scrollbar { display: none; }
 
-  .chat-box::-webkit-scrollbar {
-    display: none;
-  }
-
-  .message {
-    max-width: 65%;
+.message {
+    max-width: 70%;
     padding: 15px 20px;
     border-radius: 25px;
     font-size: 16px;
     line-height: 1.5;
-    white-space: pre-wrap;
-  }
+    word-wrap: break-word;
+}
 
-  /* PRIMARY USER MESSAGE */
-  .user {
+.user {
     align-self: flex-end;
-    background: #007bff;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
     color: white;
-    box-shadow: 0 3px 10px rgba(0,123,255,0.4);
     border-bottom-right-radius: 5px;
-  }
+    box-shadow: 0 5px 15px rgba(0,118,255,0.4);
+}
 
-  .assistant {
+.assistant {
     align-self: flex-start;
     background: rgba(255,255,255,0.9);
     color: #222;
     border-bottom-left-radius: 5px;
-  }
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
 
-  /* Input area */
-  .chat-input {
+/* Input area */
+/* Chat input - mobile fix */
+.chat-input {
     display: flex;
-    background: rgba(255,255,255,0.12);
+    flex-wrap: wrap; /* allow wrapping on small screens */
     padding: 15px 20px;
     gap: 10px;
-  }
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(6px);
+}
 
-  .chat-input input {
-    flex: 1;
+.chat-input input {
+    flex: 1 1 200px; /* allow input to shrink but not too small */
     padding: 14px 18px;
-    border-radius: 12px;
+    border-radius: 20px;
     border: none;
-    font-size: 16px;
     outline: none;
+    font-size: 16px;
     background: rgba(255,255,255,0.9);
-  }
+    min-width: 0;
+}
 
-  /* OUTLINE SEND BUTTON */
-  .send-btn {
-      border: 2px solid #00c6ff;
-      background: transparent;
-      color: #00c6ff;
-      padding: 12px 22px;
-      border-radius: 12px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.3s ease;
-  }
+.send-btn {
+    flex: 0 0 auto; /* don't shrink button */
+    border: 2px solid #00c6ff;
+    background: transparent;
+    color: #00c6ff;
+    padding: 12px 22px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.send-btn:hover {
+    background: #00c6ff;
+    color: white;
+    transform: translateY(-2px);
+}
 
-  .send-btn:hover {
-      background: #00c6ff;
-      color: white;
-      transform: translateY(-2px);
-  }
+/* Responsive */
+@media (max-width: 768px) {
+    .chat-container { height: 90vh; }
+    .message { max-width: 85%; font-size: 15px; }
+    .chat-header { font-size: 18px; }
+}
 </style>
-
 </head>
 <body>
 
@@ -168,12 +176,10 @@
 
   <div class="chat-header">
     <span>Arman's AI – <b>Study Buddy</b></span>
-
     <div class="header-buttons">
         <form action="/clear" method="POST">
             <button class="btn btn-success" type="submit">Clear</button>
         </form>
-
         <a href="/logout">
             <button class="btn btn-danger" type="button">Logout</button>
         </a>
